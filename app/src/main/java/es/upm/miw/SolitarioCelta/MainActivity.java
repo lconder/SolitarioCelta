@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.opcReiniciarPartida:
+                new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
+                break;
             case R.id.opcAjustes:
                 startActivity(new Intent(this, SCeltaPrefs.class));
                 return true;
