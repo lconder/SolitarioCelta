@@ -39,5 +39,6 @@
     <string name="prefLink2Title">¡Visita la web!</string>
     <string name="prefLink2Summary">Accede a la web de MiW</string>
     <string name="prefLink2Data">http://miw.etsisi.upm.es/</string>
+    <string name="delete">Borrar todo</string>
 
 </resources>

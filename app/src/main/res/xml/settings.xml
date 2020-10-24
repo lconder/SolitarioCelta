@@ -4,9 +4,10 @@
 
     <PreferenceCategory app:title="@string/prefTituloCategoria1">
         <EditTextPreference
-            app:key="nombreJugador"
+            app:key="player_name"
             app:title="@string/prefTituloNombreJugador"
-            app:summary="@string/prefTextoNombreJugador" />
+            app:summary="@string/prefTextoNombreJugador"
+            android:defaultValue="Random Player"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/prefTituloCategoria2">

@@ -1,6 +1,8 @@
 package es.upm.miw.SolitarioCelta;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
@@ -14,6 +16,7 @@ public class SCeltaPrefs extends AppCompatActivity {
                 .beginTransaction()
                 .replace(android.R.id.content, new SCeltaPrefsFragment())
                 .commit();
+        checkValues();
     }
 
     public static class SCeltaPrefsFragment extends PreferenceFragmentCompat {
@@ -21,5 +24,10 @@ public class SCeltaPrefs extends AppCompatActivity {
         public void onCreatePreferences(final Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.settings, rootKey);
         }
+    }
+
+    public void checkValues() {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SP.getString("player_name", "Random Player");
     }
 }

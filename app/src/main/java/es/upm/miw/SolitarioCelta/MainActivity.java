@@ -2,7 +2,9 @@ package es.upm.miw.SolitarioCelta;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +20,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+import es.upm.miw.SolitarioCelta.model.AppDatabase;
 import es.upm.miw.SolitarioCelta.model.FileHelper;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModel;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModelFactory;
+import es.upm.miw.SolitarioCelta.model.Score;
+import es.upm.miw.SolitarioCelta.model.ScoreViewModel;
+import es.upm.miw.SolitarioCelta.view.ScoreListAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,10 +34,13 @@ public class MainActivity extends AppCompatActivity {
     protected final Integer ID = 2021;
     protected SCeltaViewModel miJuegoVM;
     public FileHelper fileHelper;
+    private String userName;
+    private ScoreViewModel scoreViewModel;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        scoreViewModel = new ViewModelProvider(this).get(ScoreViewModel.class);
 
         fileHelper = new FileHelper(getApplicationContext());
 
@@ -41,6 +50,17 @@ public class MainActivity extends AppCompatActivity {
                     )
                 .get(SCeltaViewModel.class);
         mostrarTablero();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        userName = getUserName();
+    }
+
+    public String getUserName() {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        return SP.getString("player_name", "Random Player");
     }
 
     /**
@@ -60,19 +80,18 @@ public class MainActivity extends AppCompatActivity {
 
         mostrarTablero();
         if (miJuegoVM.juegoTerminado()) {
-            // TODO guardar puntuación
+            Score score = new Score(miJuegoVM.numeroFichas(), userName);
+            scoreViewModel.insert(score);
             new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
         }
     }
 
     public void save() throws IOException {
-        Log.i("TAG_SAVE", miJuegoVM.serializaTablero());
         fileHelper.write(miJuegoVM.serializaTablero());
     }
 
     public void recover() throws IOException {
         String content = fileHelper.read();
-        Log.i("TAG_RECOVER", content);
         miJuegoVM.deserializaTablero(content);
         mostrarTablero();
     }
@@ -123,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                return true;
+            case R.id.opcMejoresResultados:
+                Intent intent = new Intent(this, ScoreListActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.opcAjustes:
                 startActivity(new Intent(this, SCeltaPrefs.class));
