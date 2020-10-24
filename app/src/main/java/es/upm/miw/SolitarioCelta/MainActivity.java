@@ -16,6 +16,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
+import es.upm.miw.SolitarioCelta.model.FileHelper;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModel;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModelFactory;
 
@@ -24,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
     protected final String LOG_TAG = "MiW";
     protected final Integer ID = 2021;
     protected SCeltaViewModel miJuegoVM;
+    public FileHelper fileHelper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fileHelper = new FileHelper(getApplicationContext());
 
         miJuegoVM = new ViewModelProvider(
                     this,
@@ -57,6 +63,18 @@ public class MainActivity extends AppCompatActivity {
             // TODO guardar puntuación
             new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
         }
+    }
+
+    public void save() throws IOException {
+        Log.i("TAG_SAVE", miJuegoVM.serializaTablero());
+        fileHelper.write(miJuegoVM.serializaTablero());
+    }
+
+    public void recover() throws IOException {
+        String content = fileHelper.read();
+        Log.i("TAG_RECOVER", content);
+        miJuegoVM.deserializaTablero(content);
+        mostrarTablero();
     }
 
     /**
@@ -89,7 +107,23 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.opcReiniciarPartida:
                 new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
-                break;
+                return true;
+            case R.id.opcGuardarPartida:
+                try {
+                    save();
+                    _notify("Guardado");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            case R.id.opcRecuperarPartida:
+                try {
+                    recover();
+                    _notify("Recuperada");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
             case R.id.opcAjustes:
                 startActivity(new Intent(this, SCeltaPrefs.class));
                 return true;
@@ -112,5 +146,14 @@ public class MainActivity extends AppCompatActivity {
                         .show();
         }
         return true;
+    }
+
+    public void _notify(String textToShow) {
+        Snackbar.make(
+                findViewById(android.R.id.content),
+                textToShow,
+                Snackbar.LENGTH_LONG
+        )
+                .show();
     }
 }

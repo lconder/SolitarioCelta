@@ -165,6 +165,7 @@ class JuegoCelta {
 	 * @param str representación del tablero
      */
 	public void deserializaTablero(String str) {
+		str = "0011100001010011101111111111111111100111000011100";
 		for (int i = 0, cont = 0; i < TAMANIO; i++)
 			for (int j = 0; j < TAMANIO; j++)
 				tablero[i][j] = str.charAt(cont++) - '0';
