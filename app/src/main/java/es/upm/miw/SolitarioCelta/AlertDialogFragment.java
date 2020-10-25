@@ -25,6 +25,7 @@ public class AlertDialogFragment extends AppCompatDialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 main.miJuegoVM.reiniciar();
+                                main.resetChronometer();
                                 main.mostrarTablero();
                             }
                         }

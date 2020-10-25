@@ -41,4 +41,7 @@
     <string name="prefLink2Data">http://miw.etsisi.upm.es/</string>
     <string name="delete">Borrar todo</string>
 
+    <string name="numberTokenDefault">32</string>
+    <string name="numberTokenDescription">Fichas restantes</string>
+
 </resources>

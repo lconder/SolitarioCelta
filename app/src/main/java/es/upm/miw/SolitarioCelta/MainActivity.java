@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,22 +23,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-import es.upm.miw.SolitarioCelta.model.AppDatabase;
 import es.upm.miw.SolitarioCelta.model.FileHelper;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModel;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModelFactory;
 import es.upm.miw.SolitarioCelta.model.Score;
 import es.upm.miw.SolitarioCelta.model.ScoreViewModel;
-import es.upm.miw.SolitarioCelta.view.ScoreListAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     protected final String LOG_TAG = "MiW";
     protected final Integer ID = 2021;
+    private long timeWhenStopped = 0;
     protected SCeltaViewModel miJuegoVM;
     public FileHelper fileHelper;
     private String userName;
     private ScoreViewModel scoreViewModel;
+    TextView tvTokenNumber;
+    Chronometer chronometer;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +54,26 @@ public class MainActivity extends AppCompatActivity {
                     new SCeltaViewModelFactory(getApplication(), ID)
                     )
                 .get(SCeltaViewModel.class);
+        tvTokenNumber = findViewById(R.id.tokens);
+        chronometer = (Chronometer) findViewById(R.id.chronometer);
+        chronometer.setTextSize(50);
+        startChronometer();
         mostrarTablero();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        System.out.println("on Resume");
+        startChronometer();
         userName = getUserName();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("on Pause");
+        stopChronometer();
     }
 
     public String getUserName() {
@@ -73,14 +91,14 @@ public class MainActivity extends AppCompatActivity {
         String resourceName = getResources().getResourceEntryName(v.getId());
         int i = resourceName.charAt(1) - '0';   // fila
         int j = resourceName.charAt(2) - '0';   // columna
+        int tokens = miJuegoVM.numeroFichas();
 
         Log.i(LOG_TAG, "fichaPulsada(" + i + ", " + j + ") - " + resourceName);
         miJuegoVM.jugar(i, j);
-        Log.i(LOG_TAG, "#fichas=" + miJuegoVM.numeroFichas());
-
+        Log.i(LOG_TAG, "#fichas=" + tokens);
         mostrarTablero();
         if (miJuegoVM.juegoTerminado()) {
-            Score score = new Score(miJuegoVM.numeroFichas(), userName);
+            Score score = new Score(tokens, userName);
             scoreViewModel.insert(score);
             new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
         }
@@ -104,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         String strRId;
         String prefijoIdentificador = getPackageName() + ":id/p"; // formato: package:type/entry
         int idBoton;
+        updateTokens(miJuegoVM.numeroFichas());
 
         for (int i = 0; i < SCeltaViewModel.TAMANIO; i++)
             for (int j = 0; j < SCeltaViewModel.TAMANIO; j++) {
@@ -158,8 +177,6 @@ public class MainActivity extends AppCompatActivity {
                         .show();
                 return true;
 
-            // TODO!!! resto opciones
-
             default:
                 Snackbar.make(
                         findViewById(android.R.id.content),
@@ -171,6 +188,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void updateTokens(int tokens) {
+        tvTokenNumber.setText(String.valueOf(tokens));
+    }
+
     public void _notify(String textToShow) {
         Snackbar.make(
                 findViewById(android.R.id.content),
@@ -178,5 +199,21 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.LENGTH_LONG
         )
                 .show();
+    }
+
+    public void startChronometer() {
+        chronometer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+        chronometer.start();
+    }
+
+    public void stopChronometer() {
+        chronometer.stop();
+        timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
+    }
+
+    public void resetChronometer() {
+        stopChronometer();
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        timeWhenStopped = 0;
     }
 }

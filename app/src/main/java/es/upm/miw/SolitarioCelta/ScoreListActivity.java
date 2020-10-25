@@ -20,7 +20,6 @@ import es.upm.miw.SolitarioCelta.view.ScoreListAdapter;
 
 public class ScoreListActivity extends AppCompatActivity {
 
-    AppDatabase db;
     private ScoreViewModel scoreViewModel;
 
     @Override

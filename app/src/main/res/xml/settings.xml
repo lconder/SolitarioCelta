@@ -11,7 +11,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/prefTituloCategoria2">
-        <!-- TODO Añadir otros ajustes -->
+        <ListPreference
+            android:title="Color de fichas"
+            android:summary="Selecciona un color para las fichas"
+            android:key="tokenColor"
+            android:defaultValue="1"
+            android:entries="@array/colorsArray"
+            android:entryValues="@array/colorsValues" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/prefTituloCategoria3">

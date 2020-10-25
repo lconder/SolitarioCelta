@@ -219,4 +219,63 @@
             android:layout_toRightOf="@id/p63" />
 
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    >
+
+                    <TextView
+                        android:id="@+id/tokens"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="30dp"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="45sp"
+                        android:text="@string/numberTokenDefault"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="30sp"
+                        android:text="@string/numberTokenDescription"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:layout_weight="1">
+                <Chronometer
+                    android:id="@+id/chronometer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
 </LinearLayout>

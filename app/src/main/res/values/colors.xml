@@ -1,0 +1,13 @@
+<resources>
+
+    <color name="red">#E51C23</color>
+    <color name="blue">#FF2196F3</color>
+    <color name="green">#FF3A9600</color>
+
+    <integer-array name="colors_hex_code">
+        <item>@color/red</item>
+        <item>@color/blue</item>
+        <item>@color/green</item>
+    </integer-array>
+
+</resources>

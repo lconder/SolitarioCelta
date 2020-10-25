@@ -29,5 +29,6 @@ public class SCeltaPrefs extends AppCompatActivity {
     public void checkValues() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         SP.getString("player_name", "Random Player");
+        SP.getString("tokenColor", "1");
     }
 }
