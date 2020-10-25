@@ -266,7 +266,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/red"
                 android:layout_weight="1">
                 <Chronometer
                     android:id="@+id/chronometer"

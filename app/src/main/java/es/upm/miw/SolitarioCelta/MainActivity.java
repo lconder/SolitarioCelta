@@ -3,6 +3,8 @@ package es.upm.miw.SolitarioCelta;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -22,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 import es.upm.miw.SolitarioCelta.model.FileHelper;
 import es.upm.miw.SolitarioCelta.model.SCeltaViewModel;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected SCeltaViewModel miJuegoVM;
     public FileHelper fileHelper;
     private String userName;
+    ColorStateList colorStateList;
     private ScoreViewModel scoreViewModel;
     TextView tvTokenNumber;
     Chronometer chronometer;
@@ -64,21 +68,39 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("on Resume");
         startChronometer();
         userName = getUserName();
+        colorStateList = getColor();
+        mostrarTablero();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        System.out.println("on Pause");
         stopChronometer();
     }
 
     public String getUserName() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         return SP.getString("player_name", "Random Player");
+    }
+
+    public ColorStateList getColor() {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String index_color = SP.getString("color", "1");
+        int color = Color.BLACK;
+
+        switch (index_color) {
+            case "2":  color = Color.RED; break;
+            case "3": color = Color.BLUE; break;
+        }
+
+        return new ColorStateList(
+                new int[][]{
+                        new int[]{ color }
+                },
+                new int[]{ color }
+        );
     }
 
     /**
@@ -105,12 +127,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save() throws IOException {
-        fileHelper.write(miJuegoVM.serializaTablero());
+        fileHelper.write(
+                miJuegoVM.serializaTablero() + "," +
+                        Math.abs(chronometer.getBase() - SystemClock.elapsedRealtime())
+        );
     }
 
     public void recover() throws IOException {
         String content = fileHelper.read();
-        miJuegoVM.deserializaTablero(content);
+        String[] splitted = content.split(",");
+        miJuegoVM.deserializaTablero(splitted[0]);
+        setChronometer(Long.parseLong(splitted[1]));
         mostrarTablero();
     }
 
@@ -131,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 if (idBoton != 0) { // existe el recurso identificador del botón
                     button = findViewById(idBoton);
                     button.setChecked(miJuegoVM.obtenerFicha(i, j) == SCeltaViewModel.FICHA);
+                    button.setButtonTintList(getColor());
                 }
             }
     }
@@ -215,5 +243,10 @@ public class MainActivity extends AppCompatActivity {
         stopChronometer();
         chronometer.setBase(SystemClock.elapsedRealtime());
         timeWhenStopped = 0;
+    }
+
+    public void setChronometer(long time) {
+        timeWhenStopped = time;
+        chronometer.setBase(SystemClock.elapsedRealtime() - time);
     }
 }

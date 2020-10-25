@@ -1,6 +1,7 @@
 package es.upm.miw.SolitarioCelta;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -29,6 +30,6 @@ public class SCeltaPrefs extends AppCompatActivity {
     public void checkValues() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         SP.getString("player_name", "Random Player");
-        SP.getString("tokenColor", "1");
+        SP.getString("color", "1");
     }
 }

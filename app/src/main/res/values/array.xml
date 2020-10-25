@@ -1,6 +1,6 @@
 <resources>
     <string-array name="colorsArray">
-        <item>Verde</item>
+        <item>Negro</item>
         <item>Rojo</item>
         <item>Azul</item>
     </string-array>

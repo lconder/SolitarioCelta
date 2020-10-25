@@ -14,7 +14,7 @@
         <ListPreference
             android:title="Color de fichas"
             android:summary="Selecciona un color para las fichas"
-            android:key="tokenColor"
+            android:key="color"
             android:defaultValue="1"
             android:entries="@array/colorsArray"
             android:entryValues="@array/colorsValues" />
