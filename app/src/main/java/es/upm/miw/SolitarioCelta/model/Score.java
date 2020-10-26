@@ -16,9 +16,13 @@ public class Score {
     @ColumnInfo(name="player")
     public String player;
 
-    public Score(Integer points, String player) {
+    @ColumnInfo(name="time")
+    public String time;
+
+    public Score(Integer points, String player, String time) {
         this.points = points;
         this.player = player;
+        this.time = time;
     }
 
     public int getUid() {
@@ -39,5 +43,13 @@ public class Score {
 
     public void setPlayer(String player) {
         this.player = player;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

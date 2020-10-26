@@ -18,11 +18,13 @@ public class ScoreListAdapter extends RecyclerView.Adapter<ScoreListAdapter.Scor
 
     class ScoreViewHolder extends RecyclerView.ViewHolder {
 
+        private final TextView timeItemView;
         private final TextView scoreItemView;
         private final TextView playerNameItemView;
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
+            timeItemView = itemView.findViewById(R.id.time);
             scoreItemView = itemView.findViewById(R.id.points);
             playerNameItemView = itemView.findViewById(R.id.playerName);
         }
@@ -45,11 +47,13 @@ public class ScoreListAdapter extends RecyclerView.Adapter<ScoreListAdapter.Scor
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
         if (mScores!=null) {
             Score current = mScores.get(position);
+            holder.timeItemView.setText(current.getTime());
             holder.scoreItemView.setText(String.valueOf(current.getPoints()));
             holder.playerNameItemView.setText(current.getPlayer());
         } else {
-            holder.scoreItemView.setText("0");
             holder.playerNameItemView.setText("Sin información de jugador");
+            holder.scoreItemView.setText("0");
+            holder.timeItemView.setText("00:00");
         }
     }
 

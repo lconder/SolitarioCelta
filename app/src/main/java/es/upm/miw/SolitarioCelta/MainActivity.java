@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        System.out.println("On Resume");
         startChronometer();
         userName = getUserName();
         colorStateList = getColor();
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        System.out.println("On Pause");
         stopChronometer();
     }
 
@@ -120,7 +122,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "#fichas=" + tokens);
         mostrarTablero();
         if (miJuegoVM.juegoTerminado()) {
-            Score score = new Score(tokens, userName);
+            Score score = new Score(
+                    tokens,
+                    userName,
+                    millisecondsToTime(SystemClock.elapsedRealtime() - chronometer.getBase())
+            );
             scoreViewModel.insert(score);
             new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
         }
@@ -243,10 +249,18 @@ public class MainActivity extends AppCompatActivity {
         stopChronometer();
         chronometer.setBase(SystemClock.elapsedRealtime());
         timeWhenStopped = 0;
+        startChronometer();
     }
 
     public void setChronometer(long time) {
         timeWhenStopped = time;
         chronometer.setBase(SystemClock.elapsedRealtime() - time);
+    }
+
+    public String millisecondsToTime(Long milliseconds) {
+        int seconds = (int) (milliseconds / 1000) % 60 ;
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+
+        return minutes + ":" + seconds;
     }
 }
