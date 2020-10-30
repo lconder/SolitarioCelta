@@ -16,6 +16,7 @@
     <string name="txtDialogoFinalPregunta">¿Desea jugar otra partida?</string>
     <string name="txtDialogoFinalAfirmativo">Sí</string>
     <string name="txtDialogoFinalNegativo">No</string>
+    <string name="cancel">Cancelar</string>
 
     <!-- Acerca de -->
     <string name="aboutText">Acerca de</string>
@@ -45,11 +46,23 @@
     <string name="numberTokenDescription">Fichas restantes</string>
 
     <string name="defaultUser">Random Player</string>
-    <string name="defaultUserKey">Random Player</string>
+    <string name="defaultUserKey">player_name</string>
 
     <string name="defaultColor">1</string>
     <string name="defaultColorKey">color</string>
 
     <string name="timeKey">time</string>
+
+    <string name="warningTitleRecover">Se perderá la partida actual</string>
+    <string name="warningMessageRecover">Perderás todo el progreso de la partida actual</string>
+    <string name="saved">Guardado</string>
+    <string name="recovered">Recuperada</string>
+    <string name="error_game">No existe partida guardada</string>
+
+    <string name="defaultLabelPlayer">Sin información del jugador</string>
+    <string name="defaultLabelScore">0</string>
+    <string name="defaultLabelTime">00:00</string>
+
+    <string name="noScores">Sin información de jugadores</string>
 
 </resources>

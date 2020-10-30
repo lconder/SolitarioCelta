@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,8 +33,10 @@ public class ScoreListAdapter extends RecyclerView.Adapter<ScoreListAdapter.Scor
 
     private final LayoutInflater mInflater;
     private List<Score> mScores;
+    Context context;
 
     public ScoreListAdapter(Context context) {
+        this.context = context;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -51,9 +54,9 @@ public class ScoreListAdapter extends RecyclerView.Adapter<ScoreListAdapter.Scor
             holder.scoreItemView.setText(String.valueOf(current.getPoints()));
             holder.playerNameItemView.setText(current.getPlayer());
         } else {
-            holder.playerNameItemView.setText("Sin información de jugador");
-            holder.scoreItemView.setText("0");
-            holder.timeItemView.setText("00:00");
+            holder.playerNameItemView.setText(R.string.defaultLabelPlayer);
+            holder.scoreItemView.setText(R.string.defaultLabelScore);
+            holder.timeItemView.setText(R.string.defaultLabelTime);
         }
     }
 
@@ -65,7 +68,8 @@ public class ScoreListAdapter extends RecyclerView.Adapter<ScoreListAdapter.Scor
     @Override
     public int getItemCount() {
         if(mScores!=null) {
-            System.out.println(mScores.size());
+            if(mScores.size()==0)
+                Toast.makeText(context, R.string.noScores, Toast.LENGTH_LONG).show();
             return mScores.size();
         }
         return 0;

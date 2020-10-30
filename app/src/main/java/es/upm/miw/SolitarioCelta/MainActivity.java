@@ -1,6 +1,7 @@
 package es.upm.miw.SolitarioCelta;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     millisecondsToTime(SystemClock.elapsedRealtime() - chronometer.getBase())
             );
             scoreViewModel.insert(score);
+            chronometer.stop();
             new AlertDialogFragment().show(getSupportFragmentManager(), "ALERT_DIALOG");
         }
     }
@@ -195,18 +197,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.opcGuardarPartida:
                 try {
                     save();
-                    _notify("Guardado");
+                    _notify(getString(R.string.saved));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return true;
             case R.id.opcRecuperarPartida:
-                try {
-                    recover();
-                    _notify("Recuperada");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                checkGame();
                 return true;
             case R.id.opcMejoresResultados:
                 Intent intent = new Intent(this, ScoreListActivity.class);
@@ -232,6 +229,37 @@ public class MainActivity extends AppCompatActivity {
                         .show();
         }
         return true;
+    }
+
+    public void checkGame() {
+
+        if(miJuegoVM.numeroFichas() != 32) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.warningTitleRecover)
+                    .setMessage(R.string.warningMessageRecover)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            try {
+                                recover();
+                                _notify(getString(R.string.recovered));
+                            } catch (IOException e) {
+                                _notify(getString(R.string.error_game));
+                                e.printStackTrace();
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel,null)
+                    .show();
+        } else {
+            try {
+                recover();
+                _notify(getString(R.string.recovered));
+            } catch (IOException e) {
+                _notify(getString(R.string.error_game));
+                e.printStackTrace();
+            }
+        }
     }
 
     public void updateTokens(int tokens) {
