@@ -44,4 +44,12 @@
     <string name="numberTokenDefault">32</string>
     <string name="numberTokenDescription">Fichas restantes</string>
 
+    <string name="defaultUser">Random Player</string>
+    <string name="defaultUserKey">Random Player</string>
+
+    <string name="defaultColor">1</string>
+    <string name="defaultColorKey">color</string>
+
+    <string name="timeKey">time</string>
+
 </resources>

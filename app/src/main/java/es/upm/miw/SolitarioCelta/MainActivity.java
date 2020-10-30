@@ -63,13 +63,17 @@ public class MainActivity extends AppCompatActivity {
         chronometer.setTextSize(50);
         startChronometer();
         mostrarTablero();
+        if(savedInstanceState != null) {
+            setChronometer(savedInstanceState.getLong(getString(R.string.timeKey)));
+            chronometer.start();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("On Resume");
-        startChronometer();
+        setChronometer(timeWhenStopped);
+        chronometer.start();
         userName = getUserName();
         colorStateList = getColor();
         mostrarTablero();
@@ -78,18 +82,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        System.out.println("On Pause");
-        stopChronometer();
+        chronometer.stop();
+        timeWhenStopped = Math.abs(SystemClock.elapsedRealtime() - chronometer.getBase());
     }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState (outState);
+        timeWhenStopped = Math.abs(SystemClock.elapsedRealtime() - chronometer.getBase());
+        outState.putLong(getString(R.string.timeKey), timeWhenStopped);
+    }
+
 
     public String getUserName() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        return SP.getString("player_name", "Random Player");
+        return SP.getString(getString(R.string.defaultUserKey), getString(R.string.defaultUser));
     }
 
     public ColorStateList getColor() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String index_color = SP.getString("color", "1");
+        String index_color = SP.getString(getString(R.string.defaultColorKey), getString(R.string.defaultColor));
         int color = Color.BLACK;
 
         switch (index_color) {
@@ -242,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void stopChronometer() {
         chronometer.stop();
-        timeWhenStopped = chronometer.getBase() - SystemClock.elapsedRealtime();
+        timeWhenStopped = Math.abs(chronometer.getBase() - SystemClock.elapsedRealtime());
     }
 
     public void resetChronometer() {

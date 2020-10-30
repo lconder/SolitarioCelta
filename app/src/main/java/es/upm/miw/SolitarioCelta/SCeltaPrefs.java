@@ -29,7 +29,7 @@ public class SCeltaPrefs extends AppCompatActivity {
 
     public void checkValues() {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        SP.getString("player_name", "Random Player");
-        SP.getString("color", "1");
+        SP.getString(getString(R.string.defaultUserKey), getString(R.string.defaultUser));
+        SP.getString(getString(R.string.defaultColorKey), getString(R.string.defaultColor));
     }
 }
